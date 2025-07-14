@@ -3,11 +3,11 @@ import Button from "../../ui/Button";
 import { formatCurrency } from "../../utils/helpers";
 import { addItem, getCurrentQuantity } from "../cart/cartSlice";
 import DeleteItem from "../cart/DeleteItem";
+import UpdateItemQuantity from "../cart/UpdateItemQuantity";
 function MenuItem({ pizza }) {
   const { id, name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
   const dispatch = useDispatch();
   const pizzaQuantity = useSelector(getCurrentQuantity(id));
-  // eslint-disable-next-line no-unused-vars
   const isInCart = pizzaQuantity > 0;
   function handleAddToCart() {
     const newPizza = {
@@ -39,8 +39,13 @@ function MenuItem({ pizza }) {
               Sold out
             </p>
           )}
-          {isInCart && <DeleteItem pizzaId={id} />}
-          {!soldOut &&!isInCart&& (
+          {isInCart && (
+            <div className="flex items-center gap-3 sm:gap-8">
+              <UpdateItemQuantity pizzaId={id} pizzaQuantity={pizzaQuantity} />
+              <DeleteItem pizzaId={id} />
+            </div>
+          )}
+          {!soldOut && !isInCart && (
             <Button onClick={handleAddToCart} type="small">
               Add to cart{" "}
             </Button>
